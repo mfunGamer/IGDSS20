@@ -73,4 +73,26 @@ public class MapManager : MonoBehaviour
 
 
     }
+
+
+    public float getMaxX()
+    {
+        return 10f;
+    }
+
+    public float getMaxZ()
+    {
+        return 10f;
+    }
+
+    public float getMinX()
+    {
+        return -10f;
+    }
+
+    public float getMinZ()
+    {
+        return -10f;
+    }
+
 }
