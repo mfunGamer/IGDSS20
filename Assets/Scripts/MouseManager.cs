@@ -11,14 +11,23 @@ public class MouseManager : MonoBehaviour
     public float zoomInLimit;
     public float zoomOutLimit;
 
+    private float maxZ = 70.0f;
+    private float minZ = -70.0f;
+    private float maxX = 90.0f;
+    private float minX = -40.0f;
+
+   // public MapManager mapman;
+
     // Start is called before the first frame update
     void Start()
     {
-        camMoveSpeed = .2f;
-        scrollSpeed = 1.0f;
+        camMoveSpeed = .5f;
+        scrollSpeed = 1.5f;
 
         zoomInLimit = 1.0f;
         zoomOutLimit = 99.0f;
+
+        //mapman = new MapManager();
     }
 
     // Update is called once per frame
@@ -47,34 +56,77 @@ public class MouseManager : MonoBehaviour
     //holding the right button, and moving the mouse pans the camera on XZ-plane
     void moveCameraXZ()
     {
-        if(Input.GetAxis("Mouse X") < 0 && Input.GetAxis("Mouse Y") < 0)
+        if(Input.GetAxis("Mouse X") < 0 && Input.GetAxis("Mouse Y") < 0 && camMoveAllowedTopRight() == true)
         {
+            //move to top right
             cam.transform.position = new Vector3(cam.transform.position.x - camMoveSpeed, cam.transform.position.y,
                 cam.transform.position.z + camMoveSpeed);
         }
-        else if(Input.GetAxis("Mouse X") < 0 && Input.GetAxis("Mouse Y") > 0)
+        else if(Input.GetAxis("Mouse X") < 0 && Input.GetAxis("Mouse Y") > 0 && camMoveAllowedBottomRight() == true)
         {
+            //move to bottom right
             cam.transform.position = new Vector3(cam.transform.position.x + camMoveSpeed, cam.transform.position.y,
                 cam.transform.position.z + camMoveSpeed);
         }
-        else if (Input.GetAxis("Mouse X") > 0 && Input.GetAxis("Mouse Y") < 0)
+        else if (Input.GetAxis("Mouse X") > 0 && Input.GetAxis("Mouse Y") < 0 && camMoveAllowedTopLeft() == true)
         {
+            //move to top left
+            print(3);
             cam.transform.position = new Vector3(cam.transform.position.x - camMoveSpeed, cam.transform.position.y,
                 cam.transform.position.z - camMoveSpeed);
         }
-        else if (Input.GetAxis("Mouse X") > 0 && Input.GetAxis("Mouse Y") > 0)
+        else if (Input.GetAxis("Mouse X") > 0 && Input.GetAxis("Mouse Y") > 0 && camMoveAllowedBottomLeft() == true)
         {
+            //move to bottom left
+            print(4);
             cam.transform.position = new Vector3(cam.transform.position.x + camMoveSpeed, cam.transform.position.y,
                 cam.transform.position.z - camMoveSpeed);
         }
     }
 
 
-    //camera cannot be moved outside the boundaries of the terrain
-    void checkBoundaries()
+    //camera cannot be moved outside of the borders top right
+    private bool camMoveAllowedTopRight()
     {
-
+        if(cam.transform.position.x > minX && cam.transform.position.z < maxZ)
+        {
+            return true;
+        }
+        return false;
     }
+
+
+    //camera cannot be moved outside of the border bottom right
+    private bool camMoveAllowedBottomRight()
+    {
+        if (cam.transform.position.x < maxX && cam.transform.position.z < maxZ)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    //camera cannot be moved outside of the border top left
+    private bool camMoveAllowedTopLeft()
+    {
+        if (cam.transform.position.x > minX && cam.transform.position.z > minZ)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    //camera cannot be moved outside of the border bottom left
+    private bool camMoveAllowedBottomLeft()
+    {
+        if (cam.transform.position.x < maxX && cam.transform.position.z > minZ)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
 
     //scrolling the mouse wheel zooms the camera in and out
     void zoomInOut()
